@@ -16,6 +16,8 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showingError = false
 
+    let minNewWordLength = 3
+
     var body: some View {
         NavigationStack {
             List {
@@ -48,6 +50,12 @@ struct ContentView: View {
         let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
 
         guard answer.count > 0 else { return }
+
+        guard isAllowed(word: answer) else {
+            wordError(title: "Word not allowed", message: "Word should not be same as `\(rootWord)' and should have at least \(minNewWordLength) letters.")
+
+            return
+        }
 
         guard isOriginal(word: answer) else {
             wordError(title: "Word used already", message: "Be more original!")
@@ -84,6 +92,10 @@ struct ContentView: View {
         }
 
         fatalError("Could not load start.txt from bundle.")
+    }
+
+    func isAllowed(word: String) -> Bool {
+        (word != rootWord) && (word.count >= minNewWordLength)
     }
 
     func isOriginal(word: String) -> Bool {
