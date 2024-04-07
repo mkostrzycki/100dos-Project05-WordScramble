@@ -16,6 +16,8 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showingError = false
 
+    @State private var score = 0
+
     let minNewWordLength = 3
 
     var body: some View {
@@ -24,6 +26,10 @@ struct ContentView: View {
                 Section {
                     TextField("Enter your word", text: $newWord)
                         .textInputAutocapitalization(.never)
+                }
+
+                Section {
+                    Text("Your score: \(score)")
                 }
 
                 Section {
@@ -81,6 +87,7 @@ struct ContentView: View {
         withAnimation {
             usedWords.insert(answer, at: 0)
         }
+        score += (answer.count + usedWords.count)
         newWord = ""
     }
 
